@@ -4,8 +4,14 @@ import done.ConwayCubes.Cell.State;
 import org.junit.Test;
 import util.LineSupplier;
 import util.Utils.IntIndex;
+import util.VectorAlgebra.R;
+import util.VectorAlgebra.V;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -41,21 +47,25 @@ public class ConwayCubes {
         void incNeighbours() {
 //            System.out.println("--------------------------------------------------");
 //            System.out.println("inc neighbours: " + print());
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    for (int dz = -1; dz <= 1; dz++) {
-                        for (int dw = -1; dw <= 1; dw++) {
-                            if (dx == 0 && dy == 0 && dz == 0 && dw == 0) {
-                                continue;
-                            }
-//                        System.out.print("inc: x=" + (key.x() + dx) + ", y=" + (key.y() + dy) + ", z=" + (key.z() + dz));
-                            Cell cell = getCell(key, dx, dy, dz, dw);
-                            cell.inc();
-//                        System.out.println(", neighbours: " + cell.activeNeighbours);
-                        }
-                    }
-                }
-            }
+            R.of(V.of(-1,-1,-1,-1), V.of(1,1,1,1))
+             .members()
+             .filter(v -> !v.equals(V.of(0,0,0,0)))
+             .forEach(v -> getCell(key, v.x(1), v.x(2), v.x(3), v.x(4)).inc());
+//            for (int dx = -1; dx <= 1; dx++) {
+//                for (int dy = -1; dy <= 1; dy++) {
+//                    for (int dz = -1; dz <= 1; dz++) {
+//                        for (int dw = -1; dw <= 1; dw++) {
+//                            if (dx == 0 && dy == 0 && dz == 0 && dw == 0) {
+//                                continue;
+//                            }
+////                        System.out.print("inc: x=" + (key.x() + dx) + ", y=" + (key.y() + dy) + ", z=" + (key.z() + dz));
+//                            Cell cell = getCell(key, dx, dy, dz, dw);
+//                            cell.inc();
+////                        System.out.println(", neighbours: " + cell.activeNeighbours);
+//                        }
+//                    }
+//                }
+//            }
         }
 
         private void inc() {
@@ -109,26 +119,14 @@ public class ConwayCubes {
 
             printCells(0);
 
-//            cells.values().stream()
-//                    .filter(Cell::isActive)
-//                    .map(Cell::print)
-//                    .forEach(System.out::println);
-//            System.out.println("===========================================");
-
-            IntStream.generate(new IntIndex())
-                    .limit(6)
-                    .forEach(gen -> advanceCells(gen + 1));
+            IntStream.range(1, 6)
+                    .forEach(ConwayCubes::advanceCells);
 
             long result = cells.values().stream()
                     .filter(Cell::isActive)
                     .count();
 
             System.out.println("Result: " + result);
-
-//            cells.values().stream()
-//                    .filter(Cell::isActive)
-//                    .map(Cell::print)
-//                    .forEach(System.out::println);
         }
     }
 
@@ -175,6 +173,10 @@ public class ConwayCubes {
                 System.out.println();
             }
         }
+    }
+
+    private static Cell getCell(Key key, long dx, long dy, long dz, long dw) {
+        return getCell(key, (int)dx, (int)dy, (int)dz, (int)dw);
     }
 
     private static Cell getCell(Key key, int dx, int dy, int dz, int dw) {

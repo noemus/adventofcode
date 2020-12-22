@@ -24,7 +24,10 @@ public class BatchSupplier implements Supplier<String> {
             if (line.isBlank()) {
                 break;
             }
-            buffer.append(delimiter).append(line);
+            if (!buffer.isEmpty()) {
+                buffer.append(delimiter);
+            }
+            buffer.append(line);
         }
         String res = buffer.toString();
         return res.isBlank() ? null : res.trim();
