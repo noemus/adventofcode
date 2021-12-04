@@ -1,4 +1,4 @@
-package done;
+package done.advent2020;
 
 import org.junit.Test;
 import util.LineSupplier;
@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.function.Predicate.not;
-import static java.util.stream.Collectors.groupingByConcurrent;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;

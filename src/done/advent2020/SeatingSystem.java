@@ -1,4 +1,4 @@
-package done;
+package done.advent2020;
 
 import org.junit.Test;
 import util.LineSupplier;

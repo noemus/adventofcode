@@ -1,6 +1,6 @@
-package done;
+package done.advent2020;
 
-import done.ConwayCubes.Cell.State;
+import done.advent2020.ConwayCubes.Cell.State;
 import org.junit.Test;
 import util.LineSupplier;
 import util.Utils.IntIndex;
@@ -15,8 +15,8 @@ import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static done.ConwayCubes.Cell.State.ACTIVE;
-import static done.ConwayCubes.Cell.State.EMPTY;
+import static done.advent2020.ConwayCubes.Cell.State.ACTIVE;
+import static done.advent2020.ConwayCubes.Cell.State.EMPTY;
 import static java.util.function.Predicate.not;
 
 @SuppressWarnings("unused")

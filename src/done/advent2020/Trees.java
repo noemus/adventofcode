@@ -1,4 +1,4 @@
-package done;
+package done.advent2020;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;

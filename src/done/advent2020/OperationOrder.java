@@ -1,9 +1,14 @@
-package done;
+package done.advent2020;
 
 import org.junit.Test;
 import util.LineSupplier;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")

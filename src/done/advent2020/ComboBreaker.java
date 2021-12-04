@@ -1,4 +1,4 @@
-package active;
+package done.advent2020;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package done;
+package done.advent2020;
 
 import java.util.Scanner;
 import java.util.function.IntSupplier;

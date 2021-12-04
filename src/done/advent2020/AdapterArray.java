@@ -1,8 +1,11 @@
-package done;
+package done.advent2020;
 
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -1,4 +1,4 @@
-package done;
+package done.advent2020;
 
 import org.junit.Test;
 import util.LineSupplier;
@@ -8,7 +8,11 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static done.RainRisk.Command.Direction.*;
+import static done.advent2020.RainRisk.Command.Direction.EAST;
+import static done.advent2020.RainRisk.Command.Direction.FORWARD;
+import static done.advent2020.RainRisk.Command.Direction.NORTH;
+import static done.advent2020.RainRisk.Command.Direction.SOUTH;
+import static done.advent2020.RainRisk.Command.Direction.WEST;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unused")

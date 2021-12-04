@@ -1,6 +1,10 @@
-package done;
+package done.advent2020;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
