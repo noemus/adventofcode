@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.IntSupplier;
 import java.util.function.LongPredicate;
 import java.util.function.LongSupplier;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -104,4 +105,10 @@ public class Utils {
     }
 
     public record LongPair(long left, long right) {}
+
+    public record repeat(int times) {
+        public void action(Runnable action) {
+            IntStream.range(0, times).forEach(n -> action.run());
+        }
+    }
 }

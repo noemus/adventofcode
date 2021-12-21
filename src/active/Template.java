@@ -13,7 +13,7 @@ public class Template {
     static int[] numbers;
 
     public static void main(String[] args) {
-        try (Scanner in = new Scanner(INPUT)) {
+        try (Scanner in = new Scanner(INPUT1)) {
             numbers = Stream.generate(new LineSupplier(in))
                     .takeWhile(Objects::nonNull)
                     .mapToInt(Integer::parseInt)
@@ -25,10 +25,12 @@ public class Template {
         }
     }
 
-    private static final String INPUT = """
+    @SuppressWarnings("unused")
+    private static final String INPUT1 = """
             """;
 
-    private static final String INPUT2 = """
+    @SuppressWarnings("unused")
+    private static final String INPUT = """
             """;
 
     @Test
