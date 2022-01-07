@@ -2,47 +2,204 @@ package oop;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.Optional;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toMap;
 import static oop.Playground.TokenType.CLOSE_BRACE;
 import static oop.Playground.TokenType.EPSILON;
+import static oop.Playground.TokenType.MINUS;
 import static oop.Playground.TokenType.NUMBER;
 import static oop.Playground.TokenType.OPEN_BRACE;
+import static oop.Playground.TokenType.PLUS;
 
 public class Playground {
     public static void main(String[] args) {
-        String expression = "5 +6 -   ( 7+ 4) ";
-        Deque<Token> tokens = expression.chars()
-                                        .mapToObj(c -> (char) c)
-                                        .map(Playground::parseToken)
-                                        .filter(Objects::nonNull)
-                                        .collect(toCollection(ArrayDeque::new));
-
-        Parser parser = new Parser(tokens);
-        Expression expr = parser.expression();
-
-        System.out.println("Expr '" + expr + "' value: " + expr.evaluate());
+        parseExpression("5 +6 -   ( 7+ 4) ").print();
+        parseExpression("10 + ((51+9)-(-17-3)) + 1").print();
     }
 
-    private static Token parseToken(Character c) {
-        if (Character.isWhitespace(c)) {
-            return null;
+    private static Expression parseExpression(String expression) {
+        Tokenizer tokenizer = new Tokenizer(expression);
+        Parser parser = new Parser(tokenizer.tokens());
+        return parser.expression();
+    }
+
+    static class Tokenizer {
+        private final StringBuilder buffer = new StringBuilder();
+        private final Deque<Token> tokens = new ArrayDeque<>();
+        private final char[] characters;
+        private int pos = 0;
+
+        Tokenizer(String expression) {
+            this.characters = expression.toCharArray();
         }
-        return Character.isDigit(c)
-               ? new Token(NUMBER, c.toString())
-               : new Token(TokenType.fromCode(c.toString()), c.toString());
+
+        Deque<Token> tokens() {
+            while (hasNext()) {
+                nextToken().ifPresent(tokens::add);
+            }
+            return tokens;
+        }
+
+        private Optional<Token> nextToken() {
+            return switch (peek()) {
+                case '+' -> Optional.of(symbol(PLUS));
+                case '-' -> Optional.of(symbol(MINUS));
+                case '(' -> Optional.of(symbol(OPEN_BRACE));
+                case ')' -> Optional.of(symbol(CLOSE_BRACE));
+
+                case ' ', '\t', '\r', '\n' -> whitespace();
+                default -> Optional.of(number());
+            };
+        }
+
+        private Optional<Token> whitespace() {
+            pop();
+            return Optional.empty();
+        }
+
+        private Token symbol(TokenType type) {
+            pop();
+            return Token.of(type);
+        }
+
+        private Token number() {
+            buffer.setLength(0);
+
+            while (hasNext() && Character.isDigit(peek())) {
+                buffer.append(pop());
+            }
+
+            if (buffer.isEmpty()) {
+                throw new IllegalStateException("Expected digits but got: " + peek());
+            }
+
+            return new Token(NUMBER, buffer.toString());
+        }
+
+        private char peek() {
+            return characters[pos];
+        }
+
+        private char pop() {
+            return characters[pos++];
+        }
+
+        private boolean hasNext() {
+            return pos < characters.length;
+        }
     }
 
-    static class BracesExpr implements Expression {
-        private final Expression expr;
+    static class Parser {
+        private final Deque<Token> tokens;
 
+        public Parser(Deque<Token> tokens) {
+            this.tokens = tokens;
+        }
+
+        /**
+         * expression ::= addition
+         */
+        public Expression expression() {
+            return addition();
+        }
+
+        /**
+         * addition ::= subtraction (PLUS subtraction)*
+         */
+        private Expression addition() {
+            Expression expr = subtraction();
+
+            while (peek() == PLUS) {
+                consume(PLUS);
+                expr = new PlusExpr(expr, subtraction());
+            }
+
+            return expr;
+        }
+
+        /**
+         * subtraction ::= atomic (MINUS atomic)*
+         */
+        private Expression subtraction() {
+            Expression expr = atomic();
+
+            while (peek() == MINUS) {
+                consume(MINUS);
+                expr = new MinusExpr(expr, atomic());
+            }
+
+            return expr;
+        }
+
+        /**
+         * atomic ::= braces | number
+         */
+        private Expression atomic() {
+            if (peek() == OPEN_BRACE) {
+                return braces();
+            }
+            return number();
+        }
+
+        /**
+         * braces ::= OPEN_BRACE expression CLOSE_BRACE
+         */
+        private Expression braces() {
+            consume(OPEN_BRACE);
+            Expression expr = expression();
+            consume(CLOSE_BRACE);
+            return new BracesExpr(expr);
+        }
+
+        /**
+         * number ::= (MINUS)? NUMBER
+         */
+        private Expression number() {
+            if (peek() == MINUS) {
+                return negativeNumber();
+            }
+            return positiveNumber();
+        }
+
+        private Expression negativeNumber() {
+            consume(MINUS);
+            return new NegateExpr(positiveNumber());
+        }
+
+        private Expression positiveNumber() {
+            expect(NUMBER);
+            Token token = token();
+            return ConstantExpr.create(token.content());
+        }
+
+        private void consume(TokenType expected) {
+            expect(expected);
+            token();
+        }
+
+        private void expect(TokenType expected) {
+            if (peek() != expected) {
+                fail(expected, peek());
+            }
+        }
+
+        private void fail(TokenType expected, TokenType actual) {
+            throw new IllegalStateException("Expected " + expected.description() + " but got: " + actual);
+        }
+
+        private TokenType peek() {
+            Token token = tokens.peek();
+            return token != null ? token.type() : EPSILON;
+        }
+
+        private Token token() {
+            return tokens.pop();
+        }
+    }
+
+    static class BracesExpr extends UnaryExpr {
         BracesExpr(Expression expr) {
-            this.expr = expr;
+            super(expr);
         }
 
         @Override
@@ -56,14 +213,38 @@ public class Playground {
         }
     }
 
-    static class PlusExpression extends BinaryExpr {
-        PlusExpression(Expression expr1, Expression expr2) {
+    static class NegateExpr extends UnaryExpr {
+        NegateExpr(Expression expr) {
+            super(expr);
+        }
+
+        @Override
+        public int evaluate() {
+            return -expr.evaluate();
+        }
+
+        @Override
+        public String toString() {
+            return MINUS.code() + expr.toString();
+        }
+    }
+
+    static abstract class UnaryExpr implements Expression {
+        protected final Expression expr;
+
+        UnaryExpr(Expression expr) {
+            this.expr = expr;
+        }
+    }
+
+    static class PlusExpr extends BinaryExpr {
+        PlusExpr(Expression expr1, Expression expr2) {
             super(expr1, expr2);
         }
 
         @Override
         protected String code() {
-            return "+";
+            return PLUS.code();
         }
 
         @Override
@@ -72,14 +253,14 @@ public class Playground {
         }
     }
 
-    static class MinusExpression extends BinaryExpr {
-        MinusExpression(Expression expr1, Expression expr2) {
+    static class MinusExpr extends BinaryExpr {
+        MinusExpr(Expression expr1, Expression expr2) {
             super(expr1, expr2);
         }
 
         @Override
         protected String code() {
-            return "-";
+            return MINUS.code();
         }
 
         @Override
@@ -129,80 +310,9 @@ public class Playground {
 
     interface Expression {
         int evaluate();
-    }
 
-    static class Parser {
-        private final Deque<Token> tokens;
-
-        public Parser(Deque<Token> tokens) {
-            this.tokens = tokens;
-        }
-
-        public Expression expression() {
-            if (peek() == OPEN_BRACE) {
-                return braces();
-            }
-
-            return simpleExpression();
-        }
-
-        public Expression simpleExpression() {
-            Expression expr1 = number();
-
-            if (peek() == EPSILON || peek() == CLOSE_BRACE) {
-                return expr1;
-            }
-
-            TokenType op = token().type();
-            Expression expr2 = expression();
-
-            return switch (op) {
-                case PLUS -> new PlusExpression(expr1, expr2);
-                case MINUS -> new MinusExpression(expr1, expr2);
-                default -> fail("operation");
-            };
-        }
-
-        public Expression braces() {
-            openBrace();
-            Expression expr = expression();
-            closeBrace();
-            return new BracesExpr(expr);
-        }
-
-        private void openBrace() {
-            if (peek() != OPEN_BRACE) {
-                fail("open brace");
-            }
-            token();
-        }
-
-        private void closeBrace() {
-            if (peek() != CLOSE_BRACE) {
-                fail("close brace");
-            }
-            token();
-        }
-
-        public Expression number() {
-            if (peek() != NUMBER) {
-                return fail("number");
-            }
-            Token token = token();
-            return ConstantExpr.create(token.content());
-        }
-
-        private Expression fail(String what) {
-            throw new IllegalStateException("Expected " + what + " but got: " + peek());
-        }
-
-        private TokenType peek() {
-            Token token = tokens.peek();
-            return token != null ? token.type : EPSILON;
-        }
-
-        private Token token() {
-            return tokens.pop();
+        default void print() {
+            System.out.println("'" + this + "' -> " + evaluate());
         }
     }
 
@@ -227,45 +337,47 @@ public class Playground {
         public String toString() {
             return type + ": " + content;
         }
+
+        static Token of(TokenType type) {
+            return new Token(type, type.code());
+        }
     }
 
     enum TokenType {
-        PLUS("+"),
-        MINUS("-"),
+        PLUS("+", "plus"),
+        MINUS("-", "minus"),
 
-        OPEN_BRACE("("),
-        CLOSE_BRACE(")"),
+        OPEN_BRACE("(", "open brace"),
+        CLOSE_BRACE(")", "close brace"),
 
-        NUMBER,
-        EPSILON,
+        NUMBER("number"),
+        EPSILON("epsilon"),
         ;
 
         private final String code;
+        private final String description;
 
-        TokenType() {
-            this(null);
+        TokenType(String desc) {
+            this(null, desc);
         }
 
-        TokenType(String code) {
+        TokenType(String code, String desc) {
             this.code = code;
+            this.description = desc;
         }
 
         public String code() {
             return code;
         }
 
-        private static final Map<String, TokenType> codeToOperation =
-                Stream.of(values())
-                      .filter(val -> val != NUMBER)
-                      .filter(val -> val != EPSILON)
-                      .collect(toMap(TokenType::code, identity()));
+        public String description() {
+            return description;
+        }
 
-        static TokenType fromCode(String code) {
-            TokenType operation = codeToOperation.get(code);
-            if (operation == null) {
-                throw new IllegalStateException("Unknown operation code: " + code);
-            }
-            return operation;
+
+        @Override
+        public String toString() {
+            return name() + ": " + code();
         }
     }
 }
