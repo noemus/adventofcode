@@ -1,15 +1,15 @@
-package oop;
+package done.misc;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
 
-import static oop.Playground.TokenType.CLOSE_BRACE;
-import static oop.Playground.TokenType.EPSILON;
-import static oop.Playground.TokenType.MINUS;
-import static oop.Playground.TokenType.NUMBER;
-import static oop.Playground.TokenType.OPEN_BRACE;
-import static oop.Playground.TokenType.PLUS;
+import static done.misc.Playground.TokenType.CLOSE_BRACE;
+import static done.misc.Playground.TokenType.EPSILON;
+import static done.misc.Playground.TokenType.MINUS;
+import static done.misc.Playground.TokenType.NUMBER;
+import static done.misc.Playground.TokenType.OPEN_BRACE;
+import static done.misc.Playground.TokenType.PLUS;
 
 public class Playground {
     public static void main(String[] args) {
@@ -229,7 +229,7 @@ public class Playground {
         }
     }
 
-    static abstract class UnaryExpr implements Expression {
+    abstract static class UnaryExpr implements Expression {
         protected final Expression expr;
 
         UnaryExpr(Expression expr) {
@@ -269,7 +269,7 @@ public class Playground {
         }
     }
 
-    static abstract class BinaryExpr implements Expression {
+    abstract static class BinaryExpr implements Expression {
         protected final Expression expr1;
         protected final Expression expr2;
 

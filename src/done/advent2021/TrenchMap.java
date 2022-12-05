@@ -1,7 +1,6 @@
 package done.advent2021;
 
 import util.LineSupplier;
-import util.Utils.repeat;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -9,6 +8,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
+import static util.Utils.Repeat.repeat;
 
 public class TrenchMap {
 
@@ -28,7 +28,7 @@ public class TrenchMap {
 
             printImage();
 
-            new repeat(50).action(TrenchMap::enhance);
+            repeat(50).action(TrenchMap::enhance);
 
             printImage();
 

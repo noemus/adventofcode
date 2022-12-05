@@ -1,4 +1,4 @@
-package done;
+package done.misc;
 
 import java.util.Arrays;
 import java.util.Scanner;

@@ -115,7 +115,7 @@ public class Amphipod {
         }
 
         private Node node(int row, int col) {
-            Position pos = new Position(row, col);
+            var pos = new Position(row, col);
             if (pos.isTransit() && (col < 0 || col > 10)) {
                 throw new IllegalArgumentException("Illegal position: " + row + ", " + col);
             }
