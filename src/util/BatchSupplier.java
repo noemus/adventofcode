@@ -1,7 +1,9 @@
 package util;
 
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class BatchSupplier implements Supplier<String> {
     final Scanner in;
@@ -31,5 +33,17 @@ public class BatchSupplier implements Supplier<String> {
         }
         String res = buffer.toString();
         return res.isBlank() ? null : res.trim();
+    }
+
+    public Stream<String> stream() {
+        return Stream.generate(this).takeWhile(Objects::nonNull);
+    }
+
+    public static Stream<String> batchLines(Scanner in) {
+        return Stream.generate(new BatchSupplier(in)).takeWhile(Objects::nonNull);
+    }
+
+    public static BatchSupplier batch(Scanner in) {
+        return new BatchSupplier(in);
     }
 }

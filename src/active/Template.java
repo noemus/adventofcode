@@ -1,21 +1,18 @@
 package active;
 
 import org.junit.Test;
-import util.LineSupplier;
 
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
-@SuppressWarnings("unused")
+import static util.LineSupplier.lines;
+
 public class Template {
 
     static int[] numbers;
 
     public static void main(String[] args) {
         try (Scanner in = new Scanner(INPUT1)) {
-            numbers = Stream.generate(new LineSupplier(in))
-                    .takeWhile(Objects::nonNull)
+            numbers = lines(in)
                     .mapToInt(Integer::parseInt)
                     .toArray();
 
@@ -25,11 +22,9 @@ public class Template {
         }
     }
 
-    @SuppressWarnings("unused")
     private static final String INPUT1 = """
             """;
 
-    @SuppressWarnings("unused")
     private static final String INPUT = """
             """;
 
