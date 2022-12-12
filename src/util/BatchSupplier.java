@@ -35,7 +35,7 @@ public class BatchSupplier implements Supplier<String> {
         return res.isBlank() ? null : res.trim();
     }
 
-    public Stream<String> stream() {
+    public Stream<String> lines() {
         return Stream.generate(this).takeWhile(Objects::nonNull);
     }
 

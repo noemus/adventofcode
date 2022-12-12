@@ -22,9 +22,11 @@ public class Template {
         }
     }
 
+    @SuppressWarnings("unused")
     private static final String INPUT1 = """
             """;
 
+    @SuppressWarnings("unused")
     private static final String INPUT = """
             """;
 

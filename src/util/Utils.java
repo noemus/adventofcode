@@ -63,6 +63,14 @@ public class Utils {
         return iteratorToFiniteStream(iteratorC, parallel);
     }
 
+    public static Stream<String> split(String str) {
+        return Stream.of(str.split(",")).map(String::trim);
+    }
+
+    public static String substring(String str, String from) {
+        return str.substring(str.indexOf(from) + from.length());
+    }
+
     public static class IntIndex implements IntSupplier {
         private int index = 0;
 
