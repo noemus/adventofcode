@@ -8,13 +8,13 @@ import static util.LineSupplier.lines;
 
 public class Template {
 
-    static int[] numbers;
-
     public static void main(String[] args) {
         try (Scanner in = new Scanner(INPUT1)) {
-            numbers = lines(in)
+            lines(in)
                     .mapToInt(Integer::parseInt)
-                    .toArray();
+                    .forEach(n -> {
+
+                    });
 
             long result = 1L;
 

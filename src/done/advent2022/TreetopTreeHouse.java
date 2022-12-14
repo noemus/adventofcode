@@ -86,7 +86,6 @@ public class TreetopTreeHouse {
                     tree(x, y).ifPresent(tree -> {
                         tree.updateSouth();
                         tree.updateEast();
-//                        System.out.println(tree);
                     });
                 }
             }

@@ -54,6 +54,7 @@ public class SupplyStacks {
         }
     }
 
+    @SuppressWarnings("unused")
     record CrateMover9000(List<SupplyStack> stacks) {
         void addLine(CrateInput input) {
             while (input.index() >= stacks.size()) {
@@ -184,10 +185,10 @@ public class SupplyStacks {
 
     @SuppressWarnings("unused")
     private static final String INPUT1 = """
-                [D]        
-            [N] [C]        
+                [D]
+            [N] [C]
             [Z] [M] [P]
-             1   2   3 
+             1   2   3
             
             move 1 from 2 to 1
             move 3 from 1 to 3
@@ -205,7 +206,7 @@ public class SupplyStacks {
             [R] [H] [D] [R] [F] [C] [V] [Q] [T]
             [C] [J] [M] [G] [P] [H] [N] [J] [D]
             [H] [B] [R] [S] [R] [T] [S] [R] [L]
-             1   2   3   4   5   6   7   8   9 
+             1   2   3   4   5   6   7   8   9
             
             move 8 from 7 to 1
             move 9 from 1 to 9

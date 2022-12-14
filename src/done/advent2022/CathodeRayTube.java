@@ -1,7 +1,5 @@
 package done.advent2022;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -427,9 +425,4 @@ public class CathodeRayTube {
             noop
             noop
             """;
-
-    @Test
-    public void test() {
-
-    }
 }
