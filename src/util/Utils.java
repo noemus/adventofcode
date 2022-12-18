@@ -71,6 +71,11 @@ public class Utils {
         return str.substring(str.indexOf(from) + from.length());
     }
 
+    public static String substring(String str, String from, String to) {
+        String initial = str.substring(str.indexOf(from) + from.length());
+        return initial.substring(0, initial.indexOf(to));
+    }
+
     public static class IntIndex implements IntSupplier {
         private int index = 0;
 
