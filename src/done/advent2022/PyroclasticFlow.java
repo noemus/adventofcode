@@ -1,10 +1,10 @@
-package active;
+package done.advent2022;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -13,14 +13,27 @@ import static java.util.stream.Collectors.joining;
 import static util.LineSupplier.lines;
 
 public class PyroclasticFlow {
-    private static final long MAX_SHAPES_COUNT = 2022;
+//    private static final long MAX_SHAPES_COUNT = 2022;
+//    private static final long MAX_SHAPES_COUNT = 3*2022;
 //    private static final long MAX_SHAPES_COUNT = 1_000_000_000_000L;
+//    private static final long MAX_SHAPES_COUNT = 16 + 34;
+    private static final long MAX_SHAPES_COUNT = 1751 + 1169;
 
-    private static Chamber chamber;
-
+    // ex 1: period 35, starting from 16, height increases 53 for each period
+    // count 16 => height 26
+    // count 51 => height 79
+    // count 86 => height 132
+    // PERIODS = (COUNT - 16) / 35
+    // =========================================================================
+    // ex 2: period 1740, starting from 1751, height increases 2716 for each period
+    // count 1751 => height 26
+    // count 3491 => height 5437
+    // PERIODS = (COUNT - 1751) / 1740
+    // shape: 1, jet: 9, height: 2721, count: 1751
+    // shape: 1, jet: 9, height: 5437, count: 3491
     public static void main(String[] args) {
-        try (Scanner in = new Scanner(INPUT1)) {
-            chamber = lines(in)
+        try (Scanner in = new Scanner(INPUT)) {
+            Chamber chamber = lines(in)
                     .map(Chamber::new)
                     .findFirst()
                     .orElseThrow();
@@ -29,9 +42,22 @@ public class PyroclasticFlow {
                 chamber.nextStep();
             }
 
-            System.out.println(chamber.print());
+//            System.out.println(chamber.print());
 
-            System.out.println("Result: " + chamber.height());
+            System.out.println("Result   : " + chamber.height());
+//            int offset = 16;
+//            int period = 35;
+//            int increase = 53;
+            int offset = 1751;
+            int period = 1740;
+            int increase = 2716;
+            long start = 1_000_000_000_000L - offset;
+            long periods = start / period;
+            long correction = chamber.height();
+            System.out.println("Periods  : " + periods);
+            System.out.println("Remainder: " + (start - (periods * period)));
+            long result = periods * increase + correction;
+            System.out.println("Result2  : " + result);
         }
     }
 
@@ -39,15 +65,42 @@ public class PyroclasticFlow {
         private int nextShapeIndex;
         private final List<Shape> shapesOrder = List.of(
                 // -
-                Shape.of(Point.of(0, 0), Point.of(1, 0), Point.of(2, 0), Point.of(3, 0)),
+                Shape.of(
+                        Point.of(0, 0),
+                        Point.of(1, 0),
+                        Point.of(2, 0),
+                        Point.of(3, 0)
+                ),
                 // +
-                Shape.of(Point.of(1, 0), Point.of(1, -1), Point.of(1, -2), Point.of(0, -1), Point.of(2, -1)),
+                Shape.of(
+                        Point.of(1, 0),
+                        Point.of(1, -1),
+                        Point.of(1, -2),
+                        Point.of(0, -1),
+                        Point.of(2, -1)
+                ),
                 // reversed L
-                Shape.of(Point.of(0, 0), Point.of(1, 0), Point.of(2, 0), Point.of(2, -1), Point.of(2, -2)),
+                Shape.of(
+                        Point.of(0, 0),
+                        Point.of(1, 0),
+                        Point.of(2, 0),
+                        Point.of(2, -1),
+                        Point.of(2, -2)
+                ),
                 // |
-                Shape.of(Point.of(0, 0), Point.of(0, -1), Point.of(0, -2), Point.of(0, -3)),
+                Shape.of(
+                        Point.of(0, 0),
+                        Point.of(0, -1),
+                        Point.of(0, -2),
+                        Point.of(0, -3)
+                ),
                 // square
-                Shape.of(Point.of(0, 0), Point.of(1, 0), Point.of(0, -1), Point.of(1, -1))
+                Shape.of(
+                        Point.of(0, 0),
+                        Point.of(1, 0),
+                        Point.of(0, -1),
+                        Point.of(1, -1)
+                )
         );
 
         private int nextJetIndex;
@@ -76,9 +129,10 @@ public class PyroclasticFlow {
         }
 
         void nextStep() {
-            switch (state) {
-                case NEW_SHAPE -> placeNewShape();
-                case JETS, FALL -> move();
+            if (state == State.NEW_SHAPE) {
+                placeNewShape();
+            } else {
+                move();
             }
         }
 
@@ -144,8 +198,11 @@ public class PyroclasticFlow {
                 shapeCount++;
                 topRow = Math.min(currentShape.top(), topRow);
             }
-            if (shapeCount > 0 && (shapeCount % 1000) == 0) {
-                pruneRows();
+//            if (shapeCount > 0 && (shapeCount % 1000) == 0) {
+//                pruneRows();
+//            }
+            if (nextShapeIndex == 1) {
+                System.out.println("shape: " + nextShapeIndex + ", jet: " + nextJetIndex + ", height: " + height() + ", count: " + shapeCount);
             }
         }
 
@@ -159,9 +216,9 @@ public class PyroclasticFlow {
 
         private Direction nextJet() {
             nextJetIndex = nextJetIndex % jets.size();
-            if (nextJetIndex == 0) {
-                System.out.println("shape: " + (nextShapeIndex + 1) + ", height: " + height() + ", count: " + shapeCount);
-            }
+//            if (nextJetIndex == 0) {
+//                System.out.println("shape: " + (nextShapeIndex + 1) + ", height: " + height() + ", count: " + shapeCount);
+//            }
             return jets.get(nextJetIndex++);
         }
 
@@ -274,7 +331,7 @@ public class PyroclasticFlow {
             return transform(Point::moveRight);
         }
 
-        private Shape transform(Function<Point, Point> transformation) {
+        private Shape transform(UnaryOperator<Point> transformation) {
             return new Shape(Stream.of(points).map(transformation).toArray(Point[]::new));
         }
 
