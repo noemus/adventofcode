@@ -64,7 +64,11 @@ public class Utils {
     }
 
     public static Stream<String> split(String str) {
-        return Stream.of(str.split(",")).map(String::trim);
+        return split(str, ",");
+    }
+
+    public static Stream<String> split(String str, String delimiter) {
+        return Stream.of(str.split(delimiter)).map(String::trim);
     }
 
     public static String substring(String str, String from) {
