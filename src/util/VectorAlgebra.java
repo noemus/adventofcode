@@ -1,6 +1,6 @@
 package util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.Utils.LongIndex;
 
 import java.util.function.Supplier;
@@ -8,8 +8,8 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static util.Utils.zip;
 
 public final class VectorAlgebra {
@@ -179,7 +179,7 @@ public final class VectorAlgebra {
             if (low.dim() != high.dim()) {
                 throw new IllegalArgumentException("Range vectors must have same dimension: low.dim() = " + low.dim() + ", high.dim() = " + high.dim());
             }
-            if (low.compareTo(high) > 1) {
+            if (low.compareTo(high) > 0) {
                 throw new IllegalArgumentException("Range low must be lesser than high: low = " + low + ", high = " + high);
             }
         }
