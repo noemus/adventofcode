@@ -1,6 +1,6 @@
 package done.advent2020;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unused")
 public class CrabCups {

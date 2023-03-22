@@ -1,6 +1,6 @@
 package done.advent2022;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 import java.util.Scanner;

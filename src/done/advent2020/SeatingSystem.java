@@ -1,6 +1,6 @@
 package done.advent2020;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.LineSupplier;
 
 import java.util.Objects;

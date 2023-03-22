@@ -1,6 +1,6 @@
 package done.advent2020;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.BatchSupplier;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static util.Utils.zip;
 
 @SuppressWarnings("unused")

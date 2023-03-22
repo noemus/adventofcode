@@ -1,6 +1,6 @@
 package done.advent2021;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.BatchSupplier;
 
 import java.util.HashMap;

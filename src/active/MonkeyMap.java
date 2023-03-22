@@ -1,7 +1,5 @@
 package active;
 
-import org.junit.Test;
-
 import java.util.Scanner;
 
 import static util.LineSupplier.lines;
@@ -29,9 +27,4 @@ public class MonkeyMap {
     @SuppressWarnings("unused")
     private static final String INPUT = """
             """;
-
-    @Test
-    public void test() {
-
-    }
 }

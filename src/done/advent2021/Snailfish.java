@@ -1,6 +1,6 @@
 package done.advent2021;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.LineSupplier;
 
 import java.util.ArrayDeque;
@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 
 import static java.lang.Character.isDigit;
 import static java.util.stream.Collectors.toCollection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Snailfish {
 

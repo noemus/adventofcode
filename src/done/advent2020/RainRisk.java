@@ -1,6 +1,6 @@
 package done.advent2020;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.LineSupplier;
 
 import java.util.Objects;
@@ -13,7 +13,7 @@ import static done.advent2020.RainRisk.Command.Direction.FORWARD;
 import static done.advent2020.RainRisk.Command.Direction.NORTH;
 import static done.advent2020.RainRisk.Command.Direction.SOUTH;
 import static done.advent2020.RainRisk.Command.Direction.WEST;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unused")
 public class RainRisk {

@@ -1,7 +1,7 @@
 package done.advent2020;
 
 import done.advent2020.ConwayCubes.Cell.State;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.LineSupplier;
 import util.Utils.IntIndex;
 import util.VectorAlgebra.R;

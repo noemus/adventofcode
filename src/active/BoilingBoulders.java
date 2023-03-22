@@ -1,7 +1,5 @@
 package active;
 
-import org.junit.Test;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -2302,9 +2300,4 @@ public class BoilingBoulders {
             15,17,7
             15,11,13
             """;
-
-    @Test
-    public void test() {
-
-    }
 }

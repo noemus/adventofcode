@@ -1,6 +1,6 @@
 package done.advent2020;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import util.LineSupplier;
 
 import java.util.Comparator;
@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("unused")
 public class MonsterMessage {
